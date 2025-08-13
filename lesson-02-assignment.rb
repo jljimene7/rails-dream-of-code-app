@@ -36,9 +36,9 @@ trimester.update(application_deadline: '2025-8-25')
 Mentor.create(first_name: 'Frank', last_name: 'Smith', email: 'frank.smith@test.com')
 
 # This line of code can also be written like this, similar to Javascript object literal
+# It's common in Ruby to prefer the least amount of syntax that is still readable and valid.
+# So the first style presented is more common to see.
 Mentor.create({ "first_name": 'Frank', "last_name": 'Smith', "email": 'frank.smith@test.com' })
-## It's common in Ruby to prefer the least amount of syntax that is still readable and valid.
-## So the first style presented is more common to see.
 
 # Get all the Mentor Enrollment Assignment record for the mentor ID 22
 mentor_assignments = MentorEnrollmentAssignment.where(mentor_id: 22)
@@ -62,4 +62,49 @@ if mentor_assignments.any?
 else
   puts 'No assignments found for mentor 22, cannot reassign'
 end
+puts ' '
+
+################################## ASSIGMENT 2: WEEK 2################################
+
+# ---------------------------------------------------------------------------- #
+# Q1: Create Course records for each coding class in the Spring 2026 trimester
+# ---------------------------------------------------------------------------- #
+
+# Find the Spring2026 trimester:
+spring2026 = Trimester.find_by(year: '2026', term: 'Spring')
+puts "Year: #{spring2026.year}"
+
+# Get all Coding Class records:
+coding_classes = CodingClass.all
+puts "Classes: #{coding_classes}"
+puts ' '
+
+# Testing the .create statement before including it in the loop
+test_coding_class = coding_classes.first # Get the first coding class to test with
+
+if test_coding_class
+  puts "Testing with coding class: #{test_coding_class.title}"
+  Course.create(
+    coding_class_id: test_coding_class.id,
+    trimester_id: spring2026.id
+  )
+  puts "Classes ID: #{test_coding_class.id}"
+  puts "Trimester ID: #{spring2026.id}"
+  puts 'Test course created successfully!'
+else
+  puts 'No coding classes found to test with'
+end
+puts ' '
+
+# Loop through and create a Course for each one:
+coding_classes.each do |coding_class|
+  Course.create(
+    coding_class_id: coding_class.id,
+    trimester_id: spring2026.id
+  )
+  puts "Created course for: #{coding_class.title}"
+end
+puts ' '
+puts 'Finished creating courses for Spring 2026!'
+puts "Total courses created: #{coding_classes.count}"
 puts ' '
