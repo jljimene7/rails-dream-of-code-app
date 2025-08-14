@@ -2,12 +2,13 @@
 # ---------------------------------------------------------------------------- #
 # Task 2: Add courses, enrollments and mentors assigments for upcoming trimester
 # ---------------------------------------------------------------------------- #
-
 spring2025 = Trimester.find_by(year: '2025', term: 'Spring')
 spring2025.year
 spring2025.term
 spring2025.application_deadline
 
+puts '----Task 2: Add courses, enrollments and mentors assigments for upcoming trimester---'
+puts ' '
 puts "Year: #{spring2025.year}"
 puts "Term: #{spring2025.term}"
 puts "Application Deadline: #{spring2025.application_deadline}"
@@ -20,6 +21,8 @@ puts "Application Deadline: #{spring2025.application_deadline}"
 # The trimester instance is an in-memory copy of the data in the row of the
 # database table for that trimester
 trimester = Trimester.find_by(term: 'Fall', year: '2025')
+puts '----Task 3: Change the application deadline on the upcoming trimester to give----'
+puts ' '
 puts trimester.application_deadline
 
 # Changing the values on Trimester and then call .save! to save those values in the database
@@ -42,6 +45,8 @@ Mentor.create({ "first_name": 'Frank', "last_name": 'Smith', "email": 'frank.smi
 
 # Get all the Mentor Enrollment Assignment record for the mentor ID 22
 mentor_assignments = MentorEnrollmentAssignment.where(mentor_id: 22)
+puts '----Task 4: Add a new mentor and offload some assignments for an overloaded mentor----'
+puts ' '
 puts "Found #{mentor_assignments.count} assignments for mentor 22"
 
 # Lets choose the last one to update, assign it to a new variable
@@ -72,10 +77,13 @@ puts ' '
 
 # Find the Spring2026 trimester:
 spring2026 = Trimester.find_by(year: '2026', term: 'Spring')
+puts '===== Q1: Create Course records for each coding class in the Spring 2026 trimester ====='
+puts ' '
 puts "Year: #{spring2026.year}"
 
 # Get all Coding Class records:
 coding_classes = CodingClass.all
+puts 'CODING CLASSES'
 puts "Classes: #{coding_classes}"
 puts ' '
 
@@ -107,4 +115,74 @@ end
 puts ' '
 puts 'Finished creating courses for Spring 2026!'
 puts "Total courses created: #{coding_classes.count}"
+puts ' '
+
+# ----------------------------------------------------------------------------------------- #
+# Q2: Create New Student, Enroll, Assign Mentor
+# ----------------------------------------------------------------------------------------- #
+
+# 1. Create a new student
+new_student = Student.create(first_name: 'Luis', last_name: 'Salvador',
+                             email: 'luis.salvador@test.com')
+
+# 2. Enroll them in the Intro to Programming for Spring 2026
+
+# Check twhat columns are available in CodingClass
+puts '===== Q2: Create New Student, Enroll, Assign Mentor ====='
+puts ' '
+puts "CodingClass columns: #{CodingClass.column_names}"
+puts ' '
+intro_class1 = CodingClass.find_by(title: 'Intro to Programming')
+intro_course = Course.find_by(coding_class_id: intro_class1.id, trimester_id: spring2026.id)
+
+# Create the enrollment
+enrollment = Enrollment.create(student_id: new_student.id, course_id: intro_course.id)
+puts "Created enrollment for #{new_student.first_name}"
+puts ' '
+
+# 3. Find a mentor with no more (<=) than 2 students
+
+# Count how any assigment each mentor has
+mentor_counts = MentorEnrollmentAssignment.group(:mentor_id).count
+puts "Current mentor assigment counts: #{mentor_counts}"
+
+# Find mentors with 2 or fewer students
+suitable_mentors = mentor_counts.select { |mentor_id, count| count <= 2 }
+puts "Mentors with <= 2 assignments: #{suitable_mentors}"
+puts ' '
+
+if suitable_mentors.any?
+  # pick the first suitable mentor
+  chosen_mentor_id = suitable_mentors.keys.first
+  mentor_finder = Mentor.find(chosen_mentor_id)
+  puts "Found suitable mentor: #{mentor_finder.first_name}
+                               #{mentor_finder.last_name}
+                              (#{suitable_mentors[chosen_mentor_id]} current assignments) "
+elsif mentor_counts.any?
+  # If no mentor has <= 2 assignments, find the one with the fewest
+  min_count = mentor_counts.values.min
+  chosen_mentor_id = mentor_counts.find { |id, count| count == min_count }.first
+  mentor_finder = Mentor.find(chosen_mentor_id)
+  puts "No mentor with <= 2 assignments found. Using mentor with fewest students:
+              #{mentor_finder.first_name} #{mentor_finder.last_name} (#{min_count} assignments)"
+  puts ' '
+else
+  # If no assignment exists at all, just pick any mentor
+  mentor_finder = Mentor.first
+  puts "No existing assignment found. Using first available mentor:
+        #{mentor_finder.first_name} #{mentor_finder.last_name}"
+  puts ' '
+end
+puts ' '
+
+# 4. Assign this found mentor to the new student
+if mentor_finder
+  mentor_assignments = MentorEnrollmentAssignment.create(mentor_id: mentor_finder.id, enrollment_id: enrollment.id)
+  puts "Successfully assigned mentor #{mentor_finder.first_name} #{mentor_finder.last_name} to student #{new_student.first_name}"
+  puts "Assignment ID #{mentor_assignments.id}"
+  puts 'Q2 completed! '
+else
+  puts 'Error: No mentor available for assigment'
+  puts ' '
+end
 puts ' '
