@@ -186,3 +186,101 @@ else
   puts ' '
 end
 puts ' '
+
+# ----------------------------------------------------------------------------------------- #
+# Q3: Describe my chosen project:
+# ----------------------------------------------------------------------------------------- #
+# OVERVIEW:
+#  A web app that converts a customer problem statement + specifications into a draft quote
+#  that includes machine configuration, component selection, pricing, and margin calculations.
+#  The system references past quotes, vendor prices, and internal pricing sheets,
+#  and includes a human‑in‑the‑loop review before finalization.
+#  Draft quotes can be exported to PDF/invoice format.
+#
+# USERS AND ROLES:
+#  Staff (Sales/Engineer):
+#     Creates and edits quotes based on customer problem statements and specifications.
+#     Selects machine configurations, components, and customizations from a stored catalog.
+#     Can reference past quotes, vendor prices, and internal pricing sheets.
+#  Manager (Reviewer/Approver):
+#     Reviews draft quotes, adjusts margins if needed, requests changes,
+#     approves final quotes, and exports them as PDF invoices.
+#
+# Intake:           Staff enters customer details, problem statement, and technical specs.
+# Configuration:    Staff selects machine setup, components, and variable customizations.
+# Pricing & Margin: System pulls data from vendor prices and internal pricing sheets, then calculates totals and margins.
+# Review:           Manager reviews, can adjust values, or send back for changes.
+# Finalization:     Manager approves; system generates an exportable PDF/invoice.
+# ----------------------------------------------------------------------------------------- #
+
+# ----------------------------------------------------------------------------------------- #
+# Q4: Design the data model for your project
+# ----------------------------------------------------------------------------------------- #
+
+# # Users
+#   id
+#   name
+#   email
+#   role
+#   created_at
+#   updated_at
+
+# # Customers
+#   id
+#   name
+#   contact_name
+#   contact_email
+#   industry
+#   created_at
+#   updated_at
+
+# # Quotes
+#   id
+#   customer_id (FK)
+#   user_id (FK)
+#   status
+#   problem_statement
+#   specifications
+#   machine_configuration
+#   margin_percentage
+#   margin_amount
+#   total_price
+#   created_at
+#   updated_at
+
+# # Vendors
+#   id
+#   name
+#   contact_email
+#   created_at
+#   updated_at
+
+# # Components
+#   id
+#   vendor_id (FK)
+#   name
+#   description
+#   unit_price_vendor
+#   unit_price_internal
+#   customizable_attributes
+#   created_at
+#   updated_at
+
+# # QuoteComponents
+#   id
+#   quote_id (FK)
+#   component_id (FK)
+#   quantity
+#   price_at_quote_time
+#   customizations
+#   created_at
+#   updated_at
+
+# # PricingSheets (Optional)
+#   id
+#   component_id (FK)
+#   price_type
+#   price
+#   effective_date
+#   created_at
+#   updated_at
