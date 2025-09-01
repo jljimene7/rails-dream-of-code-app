@@ -1,4 +1,4 @@
-################################## LESSON WEEK 3 ################################
+################################## LESSON 3 WEEK 3 ################################
 
 # Lets create the migration file for our new submission table
 
@@ -34,3 +34,48 @@
 # rails db:create
 # rails dv:migrate
 # -----------------------------------------------------------------------------------#
+################################## LESSON 3 ASSIGNMENT  ###############################
+
+# ---------------------------------------------------------------------------- #
+# Q1: Tables Needed and Their Associations
+# ---------------------------------------------------------------------------- #
+# Tables Needed:
+# - Topics:
+# - lesson_topics (many-to-many = join tables)
+
+# Rails Associations:
+# - Topic has_many :lesson_topics, has_many :lessons, through:lesson_topics
+# - Lesson has_many :lesson_topics, has_many :topics, through:lesson_topics
+
+# ---------------------------------------------------------------------------- #
+# Q2: Necessary Columns Based on the Associations Decided
+# ---------------------------------------------------------------------------- #
+# Columns needed:
+# - topics: title:string
+# - lesson_topics: lesson_id:integer, topic_id:integer
+## lesson_id, topic_id are the two foreign keys that create the association links
+
+# ---------------------------------------------------------------------------- #
+# Q3: Others Columns (If any) that must be Included on the Tables
+#     What other data needs to be stored?
+# ---------------------------------------------------------------------------- #
+# Other columns:
+# # Rails convention column; helpful for audits:
+# - timestamps for both tables
+# # The topics table needs a column called title that stores strings:
+# - topics: title:string
+# ---------------------------------------------------------------------------- #
+# Q4: Write out each table's name and column names with data types
+# ---------------------------------------------------------------------------- #
+## Every Rails table gets and implicit id primary key unless you out out
+# topics: id, title, created_at, updated_at
+## List each table with its columns + types + timestamps
+# lesson_topics: id, lesson_id, topic_id, created_at, updated_at
+
+# ---------------------------------------------------------------------------- #
+# Q5: Determine the generator command you'll need to create the migration file
+#     and run the command to generate the empty migration file.
+# ---------------------------------------------------------------------------- #
+## Start migration with create_ and use the table name
+# bin/rails generate migration create_topics
+# bin/rails generate migration create_lesson_topics
