@@ -10,10 +10,10 @@ RSpec.describe Course, type: :model do
   # let(:trimester) defines the trimester variable
   # let(:course) defines the course variable
 
-  let(:coding_class) { 
+  let(:coding_class) do
     CodingClass.create(title: 'Test Class')
-  }
-  let(:trimester) { 
+  end
+  let(:trimester) do
     Trimester.create(
       year: '2025',
       term: 'Winter',
@@ -21,12 +21,12 @@ RSpec.describe Course, type: :model do
       end_date: '2025-04-30',
       application_deadline: '2024-12-15'
     )
-  }
-  let(:course) {
+  end
+  let(:course) do
     Course.create(coding_class: coding_class,
                   trimester: trimester)
-  }
-    
+  end
+
   # We define a "describe block" for each method or set of behaviors we're testing
   describe 'validations' do
     it 'is valid when both coding_class and trimester are present' do
@@ -44,7 +44,7 @@ RSpec.describe Course, type: :model do
     end
   end
 
-  describe '.student_name_list', skip: true do
+  describe '.student_email_list' do # added new Line
     # First, we'll write a test that expects the method to exist
     # for an instance of a course
     it 'exists for a course' do
@@ -65,20 +65,20 @@ RSpec.describe Course, type: :model do
       # students enrolled in the test course defined above.
       #
       # Create some test student records
-      let!(:enrolled_student_1) {
+      let!(:enrolled_student_1) do
         Student.create!(
           first_name: 'Student',
-          last_name: 'One', 
+          last_name: 'One',
           email: 'studentone@example.com'
         )
-      }
-      let!(:enrolled_student_2) {
+      end
+      let!(:enrolled_student_2) do
         Student.create!(
           first_name: 'Student',
-          last_name: 'Two', 
+          last_name: 'Two',
           email: 'studenttwo@example.com'
         )
-      }
+      end
 
       # The code in a "before block" runs before
       # the tests in this context are executed.
@@ -88,12 +88,12 @@ RSpec.describe Course, type: :model do
         Enrollment.create!(student: enrolled_student_2, course: course)
       end
 
-      let(:expected_results) {
+      let(:expected_results) do
         [
           'Student One',
           'Student Two'
         ]
-      }
+      end
 
       it 'returns an array of student names' do
         expect(course.student_name_list).to eq(expected_results)
@@ -101,7 +101,7 @@ RSpec.describe Course, type: :model do
     end
   end
 
-  describe '.student_email_list', skip: true do
+  describe '.student_email_list' do # added new Line
     it 'exists for a course' do
       expect { course.student_email_list }.not_to raise_error(NoMethodError)
     end
@@ -115,20 +115,20 @@ RSpec.describe Course, type: :model do
 
     context 'when there are students enrolled in the course' do
       # Create student records with dummy data
-      let(:enrolled_student_1) {
+      let(:enrolled_student_1) do
         Student.create!(
           first_name: 'Student',
-          last_name: 'One', 
+          last_name: 'One',
           email: 'studentone@example.com'
         )
-      }
-      let(:enrolled_student_2) {
+      end
+      let(:enrolled_student_2) do
         Student.create!(
           first_name: 'Student',
-          last_name: 'Two', 
+          last_name: 'Two',
           email: 'studenttwo@example.com'
         )
-      }
+      end
 
       # Create enrollment records for the course
       before do
@@ -137,16 +137,15 @@ RSpec.describe Course, type: :model do
       end
 
       # This is what we expect the method to return
-      let(:expected_results) {
+      let(:expected_results) do
         [
           'studentone@example.com',
           'studenttwo@example.com'
         ]
-      }
+      end
       it 'returns an array of student email addresses' do
         expect(course.student_email_list).to eq(expected_results)
       end
     end
   end
 end
-
