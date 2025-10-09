@@ -222,8 +222,8 @@ puts ' '
 #   name
 #   email
 #   role
-#   created_at
-#   updated_at
+#   created_at ## this is automatically added 
+#   updated_at ## this is automatically added 
 
 # # Customers
 #   id
@@ -236,8 +236,8 @@ puts ' '
 
 # # Quotes
 #   id
-#   customer_id (FK)
-#   user_id (FK)
+#   customer_id (FK)      # Created automatically by user:references
+#   user_id (FK)          # Created automatically by customer:references
 #   status
 #   problem_statement
 #   specifications
@@ -284,3 +284,9 @@ puts ' '
 #   effective_date
 #   created_at
 #   updated_at
+#   
+# GENERATING THE MODELS AND MIGRATION FILES: 
+# bundle exec rails generate model User name:string email:string role:string
+# 
+# BUILD THE TABLES IN THE DATASET BY RUNNING THE MIGRATION:
+# bundle exec rails db:migrate
